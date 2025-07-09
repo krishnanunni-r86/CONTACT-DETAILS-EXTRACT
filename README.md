@@ -1,6 +1,6 @@
-# PythonScriptProject
+# Python Audio Message Extraction Project
 
-A simple Python script project for audio transcription and entity extraction via a Flask API.
+A simple Python Audio Message Extraction project for audio transcription and entity extraction via a Flask API.
 
 ## Getting Started (Deployment Guide)
 
