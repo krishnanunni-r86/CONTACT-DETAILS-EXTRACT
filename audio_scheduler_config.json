@@ -1,0 +1,6 @@
+{
+    "input_dir": "C:\\Users\\krish\\Music\\Address Extract\\in_progress",
+    "output_dir": "C:\\Users\\krish\\Music\\Address Extract\\output",
+    "archive_dir": "C:\\Users\\krish\\Music\\Address Extract\\archive",
+    "poll_interval": 10
+}
