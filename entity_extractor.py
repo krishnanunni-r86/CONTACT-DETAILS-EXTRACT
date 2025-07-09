@@ -1,19 +1,26 @@
-import whisper
-import spacy
-import re
-import phonenumbers
 
+# Import required libraries
+import whisper  # Speech-to-text
+import spacy    # NLP
+import re       # Regex for pattern matching
+import phonenumbers  # Phone number parsing
+
+
+# Transcribe audio file to text using Whisper
 def transcribe_audio(file_path):
     model = whisper.load_model("base")
     result = model.transcribe(file_path)
     return result["text"]
 
 
+
+# Extract entities (name, address, email, phone, etc.) from text
 def extract_entities(text):
     nlp = spacy.load("en_core_web_sm")
     doc = nlp(text)
     entities = {"NAME": [], "GPE": [], "ADDRESS": [], "EMAIL": [], "PHONE": []}
 
+    # Use spaCy NER for names, locations, and addresses
     for ent in doc.ents:
         if ent.label_ == "PERSON":
             entities["NAME"].append(ent.text)
@@ -31,18 +38,19 @@ def extract_entities(text):
         address_matches = re.findall(fallback_pattern, text, re.IGNORECASE)
     entities["ADDRESS"].extend([a.strip(" ,.") for a in address_matches])
 
-    # Improved email regex: only match valid email patterns, including obfuscated ' at '
-    # Match: username@domain.com or username at domain.com (with optional spaces)
+    # Email regex: match username@domain.com or username at domain.com
     email_matches = re.findall(r"[\w\.-]+\s*(?:@|\s+at\s+)\s*[\w\.-]+\.[a-zA-Z]{2,}", text, re.IGNORECASE)
     # Normalize obfuscated emails (replace ' at ' with '@' and remove spaces)
     normalized_emails = [re.sub(r"\s*(?:@|\s+at\s+)\s*", "@", e.replace(" ", "")) for e in email_matches]
     entities["EMAIL"].extend(normalized_emails)
 
+    # Extract phone numbers using phonenumbers library
     for match in phonenumbers.PhoneNumberMatcher(text, "US"):
         phone_number = phonenumbers.format_number(match.number, phonenumbers.PhoneNumberFormat.INTERNATIONAL)
         entities["PHONE"].append(phone_number)
 
     return entities
+
 
 # Example usage for testing the extract_entities function
 if __name__ == "__main__":
