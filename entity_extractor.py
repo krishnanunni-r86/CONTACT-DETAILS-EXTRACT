@@ -31,16 +31,17 @@ def extract_entities(text):
             entities["ADDRESS"].append({"value": ent.text, "confidence": 0.90})
 
     # Regex for US street addresses (e.g., 327, Oak Meadow Drive, Austin, Texas, 78745)
-    # Stop address extraction at email or phone number patterns
+    # Stop address extraction at email, phone, or context clue patterns
+    stop_clues = r"@|\bat\b|\d{3}[-.\s]\d{3}[-.\s]\d{4}|\(\d{3}\)\s*\d{3}[-.\s]\d{4}|and my email address is|my phone number is|email is|contact at|thank you"
     address_pattern = r"\d{1,6}[,]? [\w .'-]+(?:Street|St|Avenue|Ave|Road|Rd|Boulevard|Blvd|Lane|Ln|Drive|Dr|Court|Ct|Trace|Way|Place|Pl|Terrace|Ter|Circle|Cir|Loop|Parkway|Pkwy|Highway|Hwy|Trail|Trl)?[\w .,'-]*?(?=,? [A-Za-z .'-]+,? [A-Za-z]{2,},? \d{5}(?:-\d{4})?)(?:,? [A-Za-z .'-]+,? [A-Za-z]{2,},? \d{5}(?:-\d{4})?)?"
     address_matches = re.findall(address_pattern, text, re.IGNORECASE)
-    # Remove any address match that contains an email or phone number
-    address_matches = [a for a in address_matches if not re.search(r"@|\bat\b|\d{3}[-.\s]\d{3}[-.\s]\d{4}|\(\d{3}\)\s*\d{3}[-.\s]\d{4}", a)]
+    # Remove any address match that contains an email, phone, or context clue
+    address_matches = [a for a in address_matches if not re.search(stop_clues, a, re.IGNORECASE)]
     if not address_matches:
-        # fallback: try to match up to city, state, zip, but stop at email/phone
+        # fallback: try to match up to city, state, zip, but stop at email/phone/context clue
         fallback_pattern = r"\d{1,6}[,]? [\w .'-]+,? [A-Za-z .'-]+,? [A-Za-z]{2,}(?:,? \d{5}(?:-\d{4})?)?"
         address_matches = re.findall(fallback_pattern, text, re.IGNORECASE)
-        address_matches = [a for a in address_matches if not re.search(r"@|\bat\b|\d{3}[-.\s]\d{3}[-.\s]\d{4}|\(\d{3}\)\s*\d{3}[-.\s]\d{4}", a)]
+        address_matches = [a for a in address_matches if not re.search(stop_clues, a, re.IGNORECASE)]
     # Assign a default confidence for regex-matched addresses
     entities["ADDRESS"].extend([{"value": a.strip(" ,."), "confidence": 0.88} for a in address_matches])
 
