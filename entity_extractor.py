@@ -22,12 +22,13 @@ def extract_entities(text):
 
     # Use spaCy NER for names, locations, and addresses
     for ent in doc.ents:
+        # spaCy does not provide per-entity confidence, so we use a default value
         if ent.label_ == "PERSON":
-            entities["NAME"].append(ent.text)
+            entities["NAME"].append({"value": ent.text, "confidence": 0.95})
         elif ent.label_ == "GPE":
-            entities["GPE"].append(ent.text)
+            entities["GPE"].append({"value": ent.text, "confidence": 0.93})
         elif ent.label_ == "LOC":
-            entities["ADDRESS"].append(ent.text)
+            entities["ADDRESS"].append({"value": ent.text, "confidence": 0.90})
 
     # Regex for US street addresses (e.g., 327, Elk Meadow Drive Austin, Texas, 78745)
     address_pattern = r"\d{1,6}[,]? [\w .'-]+(?:Street|St|Avenue|Ave|Road|Rd|Boulevard|Blvd|Lane|Ln|Drive|Dr|Court|Ct|Trace|Way|Place|Pl|Terrace|Ter|Circle|Cir|Loop|Parkway|Pkwy|Highway|Hwy|Trail|Trl)?[\w .,'-]*?\d{5}(?:-\d{4})?"
@@ -36,18 +37,21 @@ def extract_entities(text):
         # fallback: try to match up to city, state, zip
         fallback_pattern = r"\d{1,6}[,]? [\w .'-]+,? [A-Za-z .'-]+,? [A-Za-z]{2,}(?:,? \d{5}(?:-\d{4})?)?"
         address_matches = re.findall(fallback_pattern, text, re.IGNORECASE)
-    entities["ADDRESS"].extend([a.strip(" ,.") for a in address_matches])
+    # Assign a default confidence for regex-matched addresses
+    entities["ADDRESS"].extend([{"value": a.strip(" ,."), "confidence": 0.88} for a in address_matches])
 
     # Email regex: match username@domain.com or username at domain.com
     email_matches = re.findall(r"[\w\.-]+\s*(?:@|\s+at\s+)\s*[\w\.-]+\.[a-zA-Z]{2,}", text, re.IGNORECASE)
     # Normalize obfuscated emails (replace ' at ' with '@' and remove spaces)
     normalized_emails = [re.sub(r"\s*(?:@|\s+at\s+)\s*", "@", e.replace(" ", "")) for e in email_matches]
-    entities["EMAIL"].extend(normalized_emails)
+    # Assign high confidence for regex-matched emails
+    entities["EMAIL"].extend([{"value": e, "confidence": 0.99} for e in normalized_emails])
 
     # Extract phone numbers using phonenumbers library
     for match in phonenumbers.PhoneNumberMatcher(text, "US"):
         phone_number = phonenumbers.format_number(match.number, phonenumbers.PhoneNumberFormat.INTERNATIONAL)
-        entities["PHONE"].append(phone_number)
+        # Assign high confidence for phone numbers
+        entities["PHONE"].append({"value": phone_number, "confidence": 0.99})
 
     return entities
 

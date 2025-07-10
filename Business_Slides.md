@@ -28,11 +28,22 @@
 {
   "transcript": "Hi, my name is Jake Harrison. I live at 327, Elk Meadow Drive Austin, Texas, 78745. You can reach me at jake.herison@example.com or call me at 512-555-7284.",
   "details": {
-    "NAME": ["Jake Harrison"],
-    "GPE": ["Austin", "Texas"],
-    "ADDRESS": ["327, Elk Meadow Drive Austin, Texas, 78745"],
-    "EMAIL": ["jake.herison@example.com"],
-    "PHONE": ["+1 512-555-7284"]
+    "NAME": [
+      {"value": "Jake Harrison", "confidence": 0.95}
+    ],
+    "GPE": [
+      {"value": "Austin", "confidence": 0.93},
+      {"value": "Texas", "confidence": 0.93}
+    ],
+    "ADDRESS": [
+      {"value": "327, Elk Meadow Drive Austin, Texas, 78745", "confidence": 0.88}
+    ],
+    "EMAIL": [
+      {"value": "jake.herison@example.com", "confidence": 0.99}
+    ],
+    "PHONE": [
+      {"value": "+1 512-555-7284", "confidence": 0.99}
+    ]
   }
 }
 ```
