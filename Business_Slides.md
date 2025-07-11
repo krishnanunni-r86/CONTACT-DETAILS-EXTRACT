@@ -18,9 +18,12 @@
 ## Slide 3: Workflow
 1. Audio files placed in input directory or uploaded via API
 2. System transcribes and extracts details
+
 3. Results saved as JSON in output directory
 4. Processed files archived
-5. API endpoint `/extract-details` for on-demand use
+5. After each scheduler poll, all extracted JSON files are automatically moved to a `JSON files` subfolder inside the output directory.
+6. An Excel file summarizing all extracted entities is generated in the output directory after each poll (if there is data).
+7. API endpoint `/extract-details` for on-demand use
 
 ---
 ## Slide 4: Example Output
@@ -58,6 +61,7 @@
 ---
 ## Slide 6: Configuration & Requirements
 - Input, output, and archive directories configurable
+- After each scheduler poll, JSON files are moved to a `JSON files` subfolder and Excel is generated automatically
 - API endpoint: `/extract-details`
 - Supported audio formats: WAV, MP3, M4A, FLAC, OGG
 - Python 3.8+ and required packages

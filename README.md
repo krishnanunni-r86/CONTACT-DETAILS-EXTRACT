@@ -62,12 +62,18 @@ By default, running `python main.py` will now start both the Flask API and the s
    - `archive_dir`: Folder where processed audio files will be moved (e.g., `archive`)
    - `poll_interval`: How often (in seconds) to check for new files
 
+
 2. Place your audio files in the folder specified by `input_dir`.
 3. Start both the API and scheduler together:
    ```powershell
    python main.py
    ```
 4. The script will process each audio file, write a JSON result to `output_dir`, and move the audio file to `archive_dir`, while also serving the API.
+
+5. **Automated Output Organization:**
+   - After each scheduler poll, all extracted JSON files are automatically moved to a `JSON files` subfolder inside the output directory.
+   - An Excel file summarizing all extracted entities is generated in the output directory after each poll (if there is data).
+   - This keeps your output directory organized and prevents duplicate Excel exports for the same files.
 
 ### 5. Notes
 - Make sure `ffmpeg` is installed and available in your system PATH. Whisper requires it for audio processing.

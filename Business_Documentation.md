@@ -10,7 +10,6 @@ This solution automates the extraction of contact details from audio files. It l
 - **API Access:** Provides a REST API endpoint for on-demand extraction via HTTP POST requests.
 - **Archiving:** Moves processed audio files to an archive folder to prevent duplicate processing.
 
-## Workflow
 1. **Audio File Ingestion:**
    - Place audio files in the configured input directory, or upload via the API.
 2. **Processing:**
@@ -30,25 +29,15 @@ This solution automates the extraction of contact details from audio files. It l
     "GPE": ["Austin", "Texas"],
     "ADDRESS": ["327, Elk Meadow Drive Austin, Texas, 78745"],
     "EMAIL": ["jake.herison@example.com"],
-    "PHONE": ["+1 512-555-7284"]
-  }
-}
-```
 
 ## Business Value
-- **Efficiency:** Automates manual data entry from audio, saving time and reducing errors.
-- **Scalability:** Handles large volumes of audio files with minimal human intervention.
-- **Integration:** Can be integrated with CRM, customer support, or compliance systems.
-- **Auditability:** Maintains a record of processed files and extracted data for compliance and review.
 
 ## Configuration
-- **Input Directory:** Folder to monitor for new audio files.
-- **Output Directory:** Where extracted results are saved as JSON.
-- **Archive Directory:** Where processed audio files are moved.
 - **API Endpoint:** `/extract-details` for real-time extraction.
 
 ## Requirements
 - Audio files in supported formats (WAV, MP3, M4A, FLAC, OGG)
+3. **Archiving and Output Organization:**
 - Python 3.8+
 - Required Python packages (see `requirements.txt`)
 
